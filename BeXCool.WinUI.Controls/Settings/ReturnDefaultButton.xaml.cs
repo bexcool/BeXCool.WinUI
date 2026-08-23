@@ -1,22 +1,10 @@
-using BeXCool.Toolkit.Reflection.Extensions;
+using BeXCool.Toolkit.Reflection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
-using System.IO;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace BeXCool.WinUI.Controls
 {
@@ -37,11 +25,17 @@ namespace BeXCool.WinUI.Controls
 
         public object DefaultBoundPropetryValue { get; private set; }
 
+        private INotifyPropertyChanged _subscribedObject;
+        private string _subscribedLeafPropertyName;
+
         public ReturnDefaultButton()
         {
             InitializeComponent();
-            this.Loaded += (s, e) => UpdateVisibility();
-            this.DataContextChanged += (s, e) => UpdateVisibility();
+
+            Click += Button_Click;
+            Loaded += (s, e) => RefreshBindings();
+            Unloaded += (s, e) => UnsubscribeFromTarget();
+            DataContextChanged += (s, e) => RefreshBindings();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -59,13 +53,52 @@ namespace BeXCool.WinUI.Controls
         {
             if (d is ReturnDefaultButton button)
             {
-                button.UpdateVisibility();
+                button.RefreshBindings();
+            }
+        }
+
+        private void RefreshBindings()
+        {
+            UnsubscribeFromTarget();
+
+            if (DataContext == null || string.IsNullOrWhiteSpace(BoundPropertyName))
+            {
+                Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            var (obj, propInfo) = GetPropertyInfo(DataContext, BoundPropertyName);
+            if (obj is INotifyPropertyChanged inpc && propInfo != null)
+            {
+                _subscribedObject = inpc;
+                _subscribedLeafPropertyName = propInfo.Name;
+                _subscribedObject.PropertyChanged += OnTargetPropertyChanged;
+            }
+
+            UpdateVisibility();
+        }
+
+        private void OnTargetPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == _subscribedLeafPropertyName)
+            {
+                UpdateVisibility();
+            }
+        }
+
+        private void UnsubscribeFromTarget()
+        {
+            if (_subscribedObject != null)
+            {
+                _subscribedObject.PropertyChanged -= OnTargetPropertyChanged;
+                _subscribedObject = null;
+                _subscribedLeafPropertyName = null;
             }
         }
 
         private void UpdateVisibility()
         {
-            if (DataContext == null || string.IsNullOrEmpty(BoundPropertyName))
+            if (DataContext == null || string.IsNullOrWhiteSpace(BoundPropertyName))
             {
                 Visibility = Visibility.Collapsed;
                 return;
@@ -81,11 +114,9 @@ namespace BeXCool.WinUI.Controls
                 }
 
                 var currentValue = propInfo.GetValue(obj);
-
                 DefaultBoundPropetryValue = obj.GetDefaultValue(BoundPropertyName.Split('.').Last());
 
                 var isChanged = !Equals(currentValue, DefaultBoundPropetryValue);
-
                 Visibility = isChanged ? Visibility.Visible : Visibility.Collapsed;
             }
             catch
@@ -94,7 +125,7 @@ namespace BeXCool.WinUI.Controls
             }
         }
 
-        private (object, PropertyInfo) GetPropertyInfo(object obj, string path)
+        private (object obj, PropertyInfo propInfo) GetPropertyInfo(object obj, string path)
         {
             var parts = path.Split('.');
             var current = obj;
@@ -104,6 +135,7 @@ namespace BeXCool.WinUI.Controls
                 var prop = current?.GetType().GetProperty(parts[i]);
                 if (prop == null)
                     return (null, null);
+
                 current = prop.GetValue(current);
             }
 
