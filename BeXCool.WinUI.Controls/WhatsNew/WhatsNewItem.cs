@@ -99,6 +99,31 @@ namespace BeXCool.WinUI.Controls
             DependencyProperty.Register(nameof(ActionCommandParameter), typeof(object), typeof(WhatsNewItem), new PropertyMetadata(null));
 
         /// <summary>
+        /// Version the item came with, shown in a grey pill in the list. New items show <see cref="WhatsNewView.NewBadgeText"/> instead.
+        /// </summary>
+        public string Version
+        {
+            get => (string)GetValue(VersionProperty);
+            set => SetValue(VersionProperty, value);
+        }
+
+        public static readonly DependencyProperty VersionProperty =
+            DependencyProperty.Register(nameof(Version), typeof(string), typeof(WhatsNewItem), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Shows the accent "New" pill in the list instead of the <see cref="Version"/>.
+        /// Set by <see cref="WhatsNewController"/> for the items of the current version, readable for custom templates.
+        /// </summary>
+        public bool IsNew
+        {
+            get => (bool)GetValue(IsNewProperty);
+            internal set => SetValue(IsNewProperty, value);
+        }
+
+        public static readonly DependencyProperty IsNewProperty =
+            DependencyProperty.Register(nameof(IsNew), typeof(bool), typeof(WhatsNewItem), new PropertyMetadata(false));
+
+        /// <summary>
         /// Any data to identify the item by, e.g. in <see cref="WhatsNewView.ActionInvoked"/>.
         /// </summary>
         public object Tag

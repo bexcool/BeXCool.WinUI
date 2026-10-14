@@ -8,6 +8,7 @@ namespace BeXCool.WinUI.Controls
     /// <summary>
     /// <see cref="WhatsNewView"/> in a dialog with a header and a close button. Set <see cref="ContentDialog.XamlRoot"/> before
     /// calling <see cref="ContentDialog.ShowAsync"/>. <see cref="View"/> gives access to everything else of the view.
+    /// <see cref="WhatsNewController.ShowDialogAsync"/> creates and shows it from <see cref="WhatsNewOptions"/>.
     /// </summary>
     public sealed partial class WhatsNewDialog : ContentDialog
     {

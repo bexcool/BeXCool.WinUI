@@ -12,9 +12,40 @@
                       x:DataType="local:WhatsNewItem">
             <StackPanel Padding="0,10"
                         Spacing="2">
-                <TextBlock Text="{x:Bind Title, Mode=OneWay}"
-                           Style="{ThemeResource BodyStrongTextBlockStyle}"
-                           TextWrapping="WrapWholeWords" />
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="{x:Bind Title, Mode=OneWay}"
+                               Style="{ThemeResource BodyStrongTextBlockStyle}"
+                               TextWrapping="WrapWholeWords" />
+
+                    <!-- PILL - accent "New", otherwise grey with the version. Two borders so both keep their theme brushes. -->
+                    <Grid Grid.Column="1"
+                          Margin="0,1,0,0"
+                          VerticalAlignment="Top">
+                        <Border Padding="7,1,7,2"
+                                Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                CornerRadius="10"
+                                Visibility="{x:Bind local:WhatsNewView.NewBadgeVisibility(IsNew), Mode=OneWay}">
+                            <TextBlock Text="{x:Bind local:WhatsNewView.NewBadgeText}"
+                                       Style="{ThemeResource CaptionTextBlockStyle}"
+                                       Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+                        </Border>
+                        <Border Padding="6,0,6,1"
+                                Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="10"
+                                Visibility="{x:Bind local:WhatsNewView.VersionBadgeVisibility(IsNew, Version), Mode=OneWay}">
+                            <TextBlock Text="{x:Bind Version, Mode=OneWay}"
+                                       Style="{ThemeResource CaptionTextBlockStyle}"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                        </Border>
+                    </Grid>
+                </Grid>
                 <TextBlock Text="{x:Bind Description, Mode=OneWay}"
                            Style="{ThemeResource CaptionTextBlockStyle}"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"

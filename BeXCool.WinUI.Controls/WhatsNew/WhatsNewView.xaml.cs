@@ -15,7 +15,8 @@ namespace BeXCool.WinUI.Controls
     /// <summary>
     /// "What's new" overview: a list of <see cref="WhatsNewItem"/>s on the left and a card with the selected one on the right,
     /// which slides to the next card when the selection changes. Fill <see cref="Items"/> (also directly in XAML) or bind
-    /// <see cref="ItemsSource"/>. To show it in a dialog, use <see cref="WhatsNewDialog"/>.
+    /// <see cref="ItemsSource"/>. To show it in a dialog, use <see cref="WhatsNewDialog"/>, or let <see cref="WhatsNewController"/>
+    /// take care of everything.
     /// </summary>
     [ContentProperty(Name = nameof(Items))]
     public sealed partial class WhatsNewView : UserControl
@@ -108,6 +109,12 @@ namespace BeXCool.WinUI.Controls
             DependencyProperty.Register(nameof(CardTemplate), typeof(DataTemplate), typeof(WhatsNewView),
                 new PropertyMetadata(null, (d, e) => ((WhatsNewView)d).RecreateCurrentCard()));
 
+        /// <summary>
+        /// Text of the pill of new items. Static because the list templates can only reach the item, set it before showing a view.
+        /// <see cref="WhatsNewController"/> sets it from <see cref="WhatsNewOptions.NewBadgeText"/>.
+        /// </summary>
+        public static string NewBadgeText { get; set; } = "New";
+
         public WhatsNewView()
         {
             InitializeComponent();
@@ -116,20 +123,18 @@ namespace BeXCool.WinUI.Controls
             UpdateItemsSource();
         }
 
-        #region Template helpers
+        // Template helpers - static, x:Bind in the templates can only call them through the class
 
-        public static Visibility TextVisibility(string text)
-            => string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
+        public static Visibility TextVisibility(string text) => string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
+
+        public static Visibility NewBadgeVisibility(bool isNew) => isNew ? Visibility.Visible : Visibility.Collapsed;
+
+        public static Visibility VersionBadgeVisibility(bool isNew, string version) => isNew || string.IsNullOrEmpty(version) ? Visibility.Collapsed : Visibility.Visible;
 
         public static Visibility HeroVisibility(ImageSource imageSource, string glyph)
             => imageSource is null && string.IsNullOrEmpty(glyph) ? Visibility.Collapsed : Visibility.Visible;
 
-        public static string FallbackText(string text, string fallback)
-            => string.IsNullOrEmpty(text) ? fallback : text;
-
-        #endregion
-
-        #region Items and selection
+        public static string FallbackText(string text, string fallback) => string.IsNullOrEmpty(text) ? fallback : text;
 
         private void UpdateItemsSource()
         {
@@ -184,10 +189,6 @@ namespace BeXCool.WinUI.Controls
 
             ShowSelectedItem();
         }
-
-        #endregion
-
-        #region Cards
 
         private void ShowSelectedItem()
         {
@@ -317,7 +318,5 @@ namespace BeXCool.WinUI.Controls
             if ((sender as FrameworkElement)?.DataContext is WhatsNewItem item)
                 ActionInvoked?.Invoke(this, new WhatsNewItemEventArgs(item));
         }
-
-        #endregion
     }
 }
