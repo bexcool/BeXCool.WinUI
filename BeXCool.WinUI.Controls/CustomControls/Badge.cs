@@ -26,9 +26,11 @@ namespace BeXCool.WinUI.Controls
             var control = (Badge)d;
         }
 
+#nullable enable
         private Grid? _rootGrid;
         private Border? _fillLayer;
         private Border? _outlineLayer;
+#nullable disable
 
         public Badge()
         {
@@ -50,12 +52,14 @@ namespace BeXCool.WinUI.Controls
                 _rootGrid.SizeChanged += OnRootSizeChanged;
         }
 
-        // Keep ends fully rounded (pill shape) for any content height
+        /// <summary>
+        /// Keeps ends fully rounded (pill shape) for any content height
+        /// </summary>
         private void OnRootSizeChanged(object sender, SizeChangedEventArgs e)
         {
             var radius = new CornerRadius(e.NewSize.Height / 2);
-            if (_fillLayer != null) _fillLayer.CornerRadius = radius;
-            if (_outlineLayer != null) _outlineLayer.CornerRadius = radius;
+            _fillLayer?.CornerRadius = radius;
+            _outlineLayer?.CornerRadius = radius;
         }
     }
 }
