@@ -6,7 +6,7 @@
 		<UseWinUI>true</UseWinUI>
 		<WinUISDKReferences>false</WinUISDKReferences>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-		<Version>1.4</Version>
+		<Version>1.4.1</Version>
 		<Company>BeXCool</Company>
 		<Authors>Peter</Authors>
 		<Description>Toolkit for WinUI 3.</Description>
