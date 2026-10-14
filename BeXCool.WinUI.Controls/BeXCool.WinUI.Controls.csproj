@@ -6,13 +6,15 @@
 		<UseWinUI>true</UseWinUI>
 		<WinUISDKReferences>false</WinUISDKReferences>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-		<Version>1.3.2</Version>
+		<Version>1.4</Version>
 		<Company>BeXCool</Company>
 		<Authors>Peter</Authors>
 		<Description>Toolkit for WinUI 3.</Description>
 	</PropertyGroup>
 	<ItemGroup>
+		<None Remove="BeXCool.WinUI.Controls.csproj.Backup.tmp" />
 		<None Remove="Settings\ReturnDefaultButton.xaml" />
+		<None Remove="Themes\Generic.xaml" />
 		<None Remove="WhatsNew\WhatsNewDialog.xaml" />
 		<None Remove="WhatsNew\WhatsNewView.xaml" />
 	</ItemGroup>
@@ -31,6 +33,14 @@
 			<Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Update="WhatsNew\WhatsNewView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="CustomControls\Badge.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</None>
+		<Page Update="Themes\Generic.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</Page>
 	</ItemGroup>
