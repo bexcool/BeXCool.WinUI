@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="BeXCool.WinUI.Controls.WhatsNewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:BeXCool.WinUI.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="DefaultListItemTemplate"
+                      x:DataType="local:WhatsNewItem">
+            <StackPanel Padding="0,10"
+                        Spacing="2">
+                <TextBlock Text="{x:Bind Title, Mode=OneWay}"
+                           Style="{ThemeResource BodyStrongTextBlockStyle}"
+                           TextWrapping="WrapWholeWords" />
+                <TextBlock Text="{x:Bind Description, Mode=OneWay}"
+                           Style="{ThemeResource CaptionTextBlockStyle}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           TextWrapping="WrapWholeWords"
+                           Visibility="{x:Bind local:WhatsNewView.TextVisibility(Description), Mode=OneWay}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DefaultCardTemplate"
+                      x:DataType="local:WhatsNewItem">
+            <Grid Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                  BorderThickness="1"
+                  CornerRadius="{ThemeResource OverlayCornerRadius}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- HERO - the image covers the glyph, the rounded corners of the card clip both -->
+                <Grid Height="176"
+                      Visibility="{x:Bind local:WhatsNewView.HeroVisibility(ImageSource, Glyph), Mode=OneWay}">
+                    <Grid.Background>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,1">
+                            <GradientStop Offset="0"
+                                          Color="{ThemeResource SystemAccentColorDark2}" />
+                            <GradientStop Offset="0.6"
+                                          Color="{ThemeResource SystemAccentColor}" />
+                            <GradientStop Offset="1"
+                                          Color="{ThemeResource SystemAccentColorLight2}" />
+                        </LinearGradientBrush>
+                    </Grid.Background>
+
+                    <FontIcon Glyph="{x:Bind Glyph, Mode=OneWay}"
+                              FontSize="64"
+                              Foreground="White" />
+                    <Image Source="{x:Bind ImageSource, Mode=OneWay}"
+                           Stretch="UniformToFill"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+                </Grid>
+
+                <!-- TEXT -->
+                <ScrollViewer Grid.Row="1"
+                              HorizontalScrollMode="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel Padding="20,16,20,8"
+                                Spacing="8">
+                        <TextBlock Text="{x:Bind Title, Mode=OneWay}"
+                                   Style="{ThemeResource SubtitleTextBlockStyle}"
+                                   TextWrapping="WrapWholeWords" />
+                        <TextBlock Text="{x:Bind local:WhatsNewView.FallbackText(Text, Description), Mode=OneWay}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- ACTION -->
+                <Button Grid.Row="2"
+                        Margin="20,8,20,20"
+                        HorizontalAlignment="Right"
+                        Style="{ThemeResource AccentButtonStyle}"
+                        Content="{x:Bind ActionText, Mode=OneWay}"
+                        Command="{x:Bind ActionCommand, Mode=OneWay}"
+                        CommandParameter="{x:Bind ActionCommandParameter, Mode=OneWay}"
+                        Visibility="{x:Bind local:WhatsNewView.TextVisibility(ActionText), Mode=OneWay}"
+                        Click="ActionButton_Click" />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <!-- Set explicitly, the content property of this class is Items -->
+    <UserControl.Content>
+        <Grid ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ListView x:Name="ItemsListView"
+                      Width="{x:Bind PaneWidth, Mode=OneWay}"
+                      SelectionMode="Single"
+                      ItemTemplate="{StaticResource DefaultListItemTemplate}"
+                      SelectionChanged="ItemsListView_SelectionChanged" />
+
+            <!-- Cards are added from code, only the shown one and the one sliding out are here at once -->
+            <Grid x:Name="CardHost"
+                  Grid.Column="1"
+                  SizeChanged="CardHost_SizeChanged" />
+        </Grid>
+    </UserControl.Content>
+</UserControl>
