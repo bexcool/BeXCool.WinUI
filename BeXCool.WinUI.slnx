@@ -1,3 +1,19 @@
 <Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
   <Project Path="BeXCool.WinUI.Controls/BeXCool.WinUI.Controls.csproj" />
+  <Project Path="BeXCool.WinUI.TestingApp/BeXCool.WinUI.TestingApp (Package)/BeXCool.WinUI.TestingApp (Package).wapproj" Type="c7167f0d-bc9f-4e6e-afe1-012c56b48db5" Id="7996b4e2-0360-4212-8c1e-a484dcdd6cd6">
+    <Platform Solution="*|Any CPU" Project="x64" />
+    <Deploy />
+  </Project>
+  <Project Path="BeXCool.WinUI.TestingApp/BeXCool.WinUI.TestingApp/BeXCool.WinUI.TestingApp.csproj" Id="76271ba1-3b2e-422d-b704-b14b8ca539e7">
+    <Platform Solution="*|Any CPU" Project="x64" />
+    <Platform Solution="*|ARM64" Project="ARM64" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
 </Solution>
