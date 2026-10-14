@@ -52,6 +52,7 @@ namespace BeXCool.WinUI.Controls
 
         /// <summary>
         /// Hide the dialog when the action button of a card is clicked. True by default.
+        /// A single item can keep the dialog open with <see cref="WhatsNewItem.CloseOnAction"/>.
         /// </summary>
         public bool CloseOnAction { get; set; } = true;
 
@@ -97,7 +98,7 @@ namespace BeXCool.WinUI.Controls
 
         private void ContentView_ActionInvoked(WhatsNewView sender, WhatsNewItemEventArgs args)
         {
-            if (CloseOnAction)
+            if (CloseOnAction && args.Item.CloseOnAction)
                 Hide();
         }
     }

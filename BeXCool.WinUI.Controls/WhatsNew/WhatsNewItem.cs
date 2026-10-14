@@ -99,6 +99,19 @@ namespace BeXCool.WinUI.Controls
             DependencyProperty.Register(nameof(ActionCommandParameter), typeof(object), typeof(WhatsNewItem), new PropertyMetadata(null));
 
         /// <summary>
+        /// Hide the <see cref="WhatsNewDialog"/> when the action button is clicked. True by default, false keeps the dialog open,
+        /// e.g. for an action whose result the user should see right away. The dialog hides only when its <see cref="WhatsNewDialog.CloseOnAction"/> is true as well.
+        /// </summary>
+        public bool CloseOnAction
+        {
+            get => (bool)GetValue(CloseOnActionProperty);
+            set => SetValue(CloseOnActionProperty, value);
+        }
+
+        public static readonly DependencyProperty CloseOnActionProperty =
+            DependencyProperty.Register(nameof(CloseOnAction), typeof(bool), typeof(WhatsNewItem), new PropertyMetadata(true));
+
+        /// <summary>
         /// Version the item came with, shown in a grey pill in the list. New items show <see cref="WhatsNewView.NewBadgeText"/> instead.
         /// </summary>
         public string Version
