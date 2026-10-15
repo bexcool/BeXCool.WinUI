@@ -22,6 +22,36 @@
                              BadgeBrush="LimeGreen">
                 Test
             </bControls:Badge>
+
+            <!-- WHAT'S NEW - every button creates a new controller from the version, so the cache is read again -->
+            <StackPanel Margin="10,24,10,10"
+                        Spacing="8">
+                <TextBlock Text="What's new"
+                           Style="{ThemeResource SubtitleTextBlockStyle}" />
+                <TextBox x:Name="WhatsNewVersionTextBox"
+                         Header="App version"
+                         Text="1.4.1"
+                         Width="200"
+                         HorizontalAlignment="Left"
+                         TextChanged="WhatsNewVersionTextBox_TextChanged" />
+                <StackPanel Orientation="Horizontal"
+                            Spacing="8">
+                    <Button Content="Show"
+                            Style="{ThemeResource AccentButtonStyle}"
+                            Click="ShowWhatsNewButton_Click" />
+                    <Button Content="Show if new"
+                            Click="ShowWhatsNewIfNewButton_Click" />
+                    <Button Content="Forget seen version"
+                            Click="ForgetWhatsNewButton_Click" />
+                </StackPanel>
+                <TextBlock x:Name="WhatsNewStatusTextBlock"
+                           Style="{ThemeResource CaptionTextBlockStyle}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           IsTextSelectionEnabled="True" />
+                <TextBlock x:Name="WhatsNewActionTextBlock"
+                           Style="{ThemeResource CaptionTextBlockStyle}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

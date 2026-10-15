@@ -26,24 +26,14 @@
                     <Grid Grid.Column="1"
                           Margin="0,1,0,0"
                           VerticalAlignment="Top">
-                        <Border Padding="7,1,7,2"
-                                Background="{ThemeResource AccentFillColorDefaultBrush}"
-                                CornerRadius="10"
-                                Visibility="{x:Bind local:WhatsNewView.NewBadgeVisibility(IsNew), Mode=OneWay}">
-                            <TextBlock Text="{x:Bind local:WhatsNewView.NewBadgeText}"
-                                       Style="{ThemeResource CaptionTextBlockStyle}"
-                                       Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
-                        </Border>
-                        <Border Padding="6,0,6,1"
-                                Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                                BorderThickness="1"
-                                CornerRadius="10"
-                                Visibility="{x:Bind local:WhatsNewView.VersionBadgeVisibility(IsNew, Version), Mode=OneWay}">
-                            <TextBlock Text="{x:Bind Version, Mode=OneWay}"
-                                       Style="{ThemeResource CaptionTextBlockStyle}"
-                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-                        </Border>
+                        <local:Badge BadgeBrush="{ThemeResource AccentFillColorDefaultBrush}"
+                                     Visibility="{x:Bind local:WhatsNewView.NewBadgeVisibility(IsNew), Mode=OneWay}">
+                            <TextBlock Text="{x:Bind local:WhatsNewView.NewBadgeText}" />
+                        </local:Badge>
+                        <local:Badge BadgeBrush="{ThemeResource ControlStrongFillColorDefaultBrush}"
+                                     Visibility="{x:Bind local:WhatsNewView.VersionBadgeVisibility(IsNew, Version), Mode=OneWay}">
+                            <TextBlock Text="{x:Bind Version, Mode=OneWay}" />
+                        </local:Badge>
                     </Grid>
                 </Grid>
                 <TextBlock Text="{x:Bind Description, Mode=OneWay}"

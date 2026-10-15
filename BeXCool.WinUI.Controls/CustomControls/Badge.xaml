@@ -13,6 +13,12 @@
                 Value="Center" />
         <Setter Property="VerticalContentAlignment"
                 Value="Center" />
+        <!-- Font of CaptionTextBlockStyle. Inherited by string content and by a TextBlock content without its own style -
+             an implicit TextBlock style in the template wouldn't reach the content, its lookup goes through the Badge, not the template. -->
+        <Setter Property="FontSize"
+                Value="{ThemeResource CaptionTextBlockFontSize}" />
+        <Setter Property="FontWeight"
+                Value="Normal" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="c:Badge">
